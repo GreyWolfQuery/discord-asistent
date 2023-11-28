@@ -20,6 +20,13 @@ module.exports = {
     channel.messages.fetch({ limit: paramMessages.value }).then(async messages =>
     {
       const msgCount = messages.size;
+
+      if (msgCount === 0)
+      {
+        ia.editReply("> **Není co smazat**")
+        return;
+      }
+
       const message = `> **Mazání ${msgCount} zpráv...**\n`;
 
       await ia.editReply({ content: message, ephemeral: true });

@@ -131,6 +131,7 @@ client.on(Events.InteractionCreate, async ia =>
   if (!cmd)
   {
     console.error(`ERROR >> command '${ia.commandName}' is not matching any saved commands`);
+    await ia.reply({ content: `> **Chyba!**\n${codeBlock("Příkaz nenalezen.")}`, ephemeral: true });
     return;
   }
 

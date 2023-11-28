@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.3.1",
+    "mysql": "^2.18.1"
+  },
+  "name": "discordasistent",
+  "description": "",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GreyWolfQuery/discord-asistent.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GreyWolfQuery/discord-asistent/issues"
+  },
+  "homepage": "https://github.com/GreyWolfQuery/discord-asistent#readme"
+}

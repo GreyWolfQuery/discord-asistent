@@ -13,29 +13,39 @@ module.exports = {
 
   async execute(ia)
   {
+    await ia.deferReply({ ephemeral: true });
     const paramMessages = ia.options.get("messages");
-
 
     const channel = ia.channel;
     channel.messages.fetch({ limit: paramMessages.value }).then(async messages =>
     {
       const msgCount = messages.size;
-      const message = `> **Mažu ${msgCount} zpráv**\n`;
-      await ia.reply({ content: message, ephemeral: true });
+      const message = `> **Mazání ${msgCount} zpráv...**\n`;
 
-      var now = 1;
-      let percent = 100, progress = 5, progressBar = "=====";
-      messages.forEach(msg =>
+      await ia.editReply({ content: message, ephemeral: true });
+      ia.channel.send(`> **<@${ia.user.id}> nechal smazat ${msgCount} zpráv.**`);
+
+      var now = 0;
+      const progressStr = "█", progressMax = 7;
+      let percent = 100, progress = progressMax, progressBar = progressStr.repeat(progress);
+
+      await (new Promise((resolve) =>
       {
-        msg.delete(1000);
+        messages.forEach(async msg =>
+        {
+          await msg.delete(100);
+          ++now;
 
-        percent = Math.floor((now / msgCount) * 100);
-        progress = Math.floor((percent / 100) * 5);
-        progressBar = "=".repeat(progress) + " ".repeat(5 - progress);
-        ia.editReply(message + codeBlock(`[${progressBar}] ${percent}% | Smazáno ${now}/${msgCount} zpráv`));
-        ++now;
-      });
-      ia.editReply(message + codeBlock(`[${progressBar}] ${percent}% | Hotovo!`));
+          percent = Math.floor((now / msgCount) * 100);
+          progress = Math.floor((percent / 100) * progressMax);
+          progressBar = progressStr.repeat(progress) + " ".repeat(progressMax - progress);
+          ia.editReply(message + codeBlock(`${progressBar} ${percent}% | Smazáno ${now}/${msgCount} zpráv`));
+          if (now >= msgCount)
+            resolve();
+        });
+      }));
+
+      ia.editReply(message + codeBlock(`${progressBar} ${percent}% | Hotovo`));
     });
   }
 };
